@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alzheimer MRI Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f7f7f7;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        h1 {
+            color: #4caf50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="file"] {
+            border: 1px solid #ccc;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        button {
+            background: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        h2, h3 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f1f1f1;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        img {
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Alzheimer MRI Prediction</h1>
+
+        <!-- Form untuk upload gambar -->
+        <form method="POST" enctype="multipart/form-data">
+            <label for="image">Upload MRI Image:</label>
+            <input type="file" name="image" accept="image/*" required>
+            <button type="submit">Upload and Predict</button>
+        </form>
+
+        {% if result %}
+        <h2>Prediction Result:</h2>
+        <p>Predicted Label: {{ result.predicted_label }} ({{ result.probability }}%)</p>
+        
+        <h3>Top 2 Predictions:</h3>
+        <ul>
+            {% for label, prob in result.top_predictions %}
+            <li>{{ label }}: {{ prob }}%</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Uploaded Image:</h3>
+        <img src="{{ url_for('static', filename='uploads/' + result.image_path.split('/')[-1]) }}" width="300" alt="Uploaded Image">
+
+        {% endif %}
+    </div>
+</body>
+</html>
